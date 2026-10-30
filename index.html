@@ -1,0 +1,1441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#eef2ed">
+<title>Atlantic Season Desk</title>
+<style>
+:root {
+  color-scheme: light;
+  --ink: #172a30;
+  --muted: #647476;
+  --paper: #f3f5ef;
+  --panel: #fffefa;
+  --line: #d7dfd9;
+  --sea: #d9e8e4;
+  --sea-deep: #b7d5d0;
+  --green: #26594c;
+  --green-soft: #e3eee6;
+  --coral: #c85c48;
+  --amber: #d79b45;
+  --blue: #426d82;
+  --shadow: 0 10px 28px rgba(27, 55, 53, .07);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+  font-size: 14px;
+}
+button { color: inherit; font: inherit; }
+.app { max-width: 1580px; margin: auto; padding: 22px 30px 32px; }
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
+.brand { display: flex; align-items: center; gap: 13px; }
+.brand-mark { display: grid; width: 42px; height: 42px; place-items: center; color: #fff; background: var(--green); border-radius: 12px 12px 12px 4px; }
+.brand-mark svg { width: 25px; height: 25px; }
+.brand h1 { margin: 0; font: 700 17px/1.1 Georgia, serif; letter-spacing: .01em; }
+.brand p { margin: 5px 0 0; color: var(--muted); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+.top-actions { display: flex; align-items: center; gap: 9px; }
+.quiet-button, .primary-button { min-height: 38px; padding: 0 13px; border: 1px solid var(--line); border-radius: 5px; background: var(--panel); cursor: pointer; }
+.quiet-button { color: #42575a; }
+.quiet-button:hover { border-color: #9fb3ac; background: #f8faf5; }
+.primary-button { border-color: var(--green); color: #fff; background: var(--green); font-weight: 650; }
+.primary-button:hover { background: #1d473c; }
+button:focus-visible { outline: 3px solid #d79b45; outline-offset: 2px; }
+.icon { display: inline-block; margin-right: 6px; font-size: 15px; vertical-align: -1px; }
+.appearance-dialog { width: min(560px, calc(100vw - 28px)); max-height: 90vh; overflow: auto; padding: 0; border: 1px solid var(--line); border-radius: 7px; color: var(--ink); background: var(--panel); box-shadow: 0 24px 70px rgba(27,55,53,.24); }
+.appearance-dialog::backdrop { background: rgba(18,34,35,.42); }
+.appearance-form { padding: 20px; }
+.appearance-form h2 { margin: 0; font: 500 22px Georgia, serif; }
+.appearance-form > p { margin: 7px 0 18px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.appearance-options { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+.appearance-options label { display: grid; gap: 6px; color: #60736e; font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.appearance-options select { min-height: 38px; padding: 0 9px; border: 1px solid var(--line); border-radius: 4px; background: #fffefa; color: var(--ink); font: 12px "Avenir Next", Avenir, sans-serif; letter-spacing: 0; text-transform: none; }
+.appearance-options input[type="color"] { width: 100%; height: 38px; padding: 3px; border: 1px solid var(--line); border-radius: 4px; background: #fffefa; cursor: pointer; }
+.gradient-editor { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.gradient-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.gradient-heading strong { font: 600 12px Georgia, serif; }
+.gradient-heading span { color: var(--muted); font-size: 10px; }
+.gradient-stops { display: grid; gap: 5px; }
+.gradient-stop { display: grid; grid-template-columns: minmax(100px, 1fr) 100px 40px; align-items: center; gap: 8px; }
+.gradient-stop label { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 10px; }
+.gradient-stop input[type="number"] { width: 64px; height: 30px; padding: 0 6px; border: 1px solid var(--line); border-radius: 3px; font-size: 11px; }
+.gradient-stop input[type="color"] { width: 100%; height: 30px; padding: 2px; border: 1px solid var(--line); border-radius: 3px; background: white; cursor: pointer; }
+.gradient-stop button { width: 34px; height: 30px; border: 1px solid var(--line); border-radius: 3px; background: white; cursor: pointer; }
+.gradient-actions { display: flex; justify-content: space-between; gap: 8px; margin-top: 9px; }
+.gradient-actions button { min-height: 31px; padding: 0 8px; border: 1px solid var(--line); border-radius: 3px; background: white; cursor: pointer; font-size: 10px; }
+.appearance-preview { display: flex; align-items: center; gap: 10px; margin-top: 17px; padding: 11px; border: 1px solid var(--line); border-radius: 4px; background: #f7f9f4; color: var(--muted); font-size: 11px; }
+.appearance-preview .brand-mark { flex: 0 0 auto; }
+.appearance-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+.appearance-actions button { min-height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); cursor: pointer; font-size: 11px; }
+.appearance-actions .primary-button { border-color: var(--green); color: #fff; background: var(--green); }
+.overview { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(270px, .75fr); gap: 14px; margin-bottom: 14px; }
+.season-banner { position: relative; display: flex; align-items: center; justify-content: space-between; min-height: 120px; overflow: hidden; padding: 21px 25px; border: 1px solid #d3ddd4; border-radius: 7px; background: linear-gradient(110deg, #e1ece4 0%, #edf1e8 52%, #f5f0e2 100%); }
+.season-banner:after { position: absolute; top: -88px; right: 14%; width: 265px; height: 265px; border: 1px solid rgba(38,89,76,.12); border-radius: 50%; box-shadow: 0 0 0 25px rgba(38,89,76,.035), 0 0 0 54px rgba(38,89,76,.025); content: ""; }
+.eyebrow { color: var(--green); font-size: 10px; font-weight: 750; letter-spacing: .15em; text-transform: uppercase; }
+.season-banner h2 { position: relative; z-index: 1; margin: 7px 0 5px; font: 500 29px/1.05 Georgia, serif; }
+.season-banner p { margin: 0; color: #526661; font-size: 12px; }
+.season-progress { position: relative; z-index: 1; min-width: 155px; padding-left: 22px; border-left: 1px solid rgba(38,89,76,.2); }
+.season-progress strong { display: block; font: 500 31px/1 Georgia, serif; }
+.season-progress span { display: block; margin-top: 6px; color: #526661; font-size: 11px; }
+.date-panel { display: flex; flex-direction: column; justify-content: center; padding: 18px 20px; border: 1px solid var(--line); border-radius: 7px; background: var(--panel); box-shadow: var(--shadow); }
+.date-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.date-row span { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .09em; }
+.date-row strong { font: 500 24px/1 Georgia, serif; }
+.date-panel p { margin: 10px 0 0; color: var(--muted); font-size: 12px; }
+.metrics { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); margin-bottom: 12px; border: 1px solid var(--line); border-radius: 7px; background: var(--panel); box-shadow: var(--shadow); }
+.metric { min-height: 81px; padding: 14px 17px 12px; border-right: 1px solid var(--line); }
+.metric:last-child { border-right: 0; }
+.metric span { display: block; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+.metric strong { display: block; margin-top: 7px; font: 500 25px/1 Georgia, serif; }
+.metric small { display: block; margin-top: 4px; color: #778381; font-size: 10px; }
+.conditions { display: grid; grid-template-columns: repeat(3, 1fr); margin-bottom: 15px; border: 1px solid var(--line); border-radius: 6px; background: #e7efeb; }
+.condition { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 46px; padding: 8px 15px; border-right: 1px solid #d2ded7; }
+.condition:last-child { border-right: 0; }
+.condition span { color: #60736e; font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.condition strong { color: #254c43; font-size: 12px; }
+.content { display: grid; grid-template-columns: minmax(0, 1fr) 315px; gap: 15px; align-items: start; }
+.map-panel, .side-panel { overflow: hidden; border: 1px solid var(--line); border-radius: 7px; background: var(--panel); box-shadow: var(--shadow); }
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; padding: 0 17px; border-bottom: 1px solid var(--line); }
+.panel-head h3 { margin: 0; font: 600 14px Georgia, serif; }
+.panel-head span { color: var(--muted); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+.basin-panel-meta { display: flex; align-items: center; gap: 9px; }
+.basin-panel-meta select { max-width: 180px; min-height: 31px; padding: 0 7px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); color: var(--ink); font-size: 10px; }
+.storm-symbol-label { margin-top: 13px; }
+.custom-icon-editor { margin-top: 13px; padding: 10px; border: 1px solid var(--line); border-radius: 4px; background: #f7f9f4; }
+.custom-icon-editor[hidden] { display: none; }
+.custom-icon-editor > span { display: block; margin-bottom: 7px; color: #60736e; font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.custom-icon-tools { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.custom-icon-tools canvas { width: 150px; height: 100px; border: 1px solid #d5dfd8; background: #fff; cursor: crosshair; touch-action: none; }
+.custom-icon-actions { display: grid; gap: 6px; }
+.custom-icon-actions button { min-height: 30px; padding: 0 8px; border: 1px solid var(--line); border-radius: 4px; background: white; cursor: pointer; font-size: 10px; }
+.custom-icon-tip { display: block; margin-top: 7px; color: var(--muted); font-size: 10px; }
+.map-wrap { position: relative; min-height: 390px; background: var(--sea); }
+canvas { display: block; width: 100%; height: 390px; }
+.map-legend { position: absolute; bottom: 13px; left: 14px; display: flex; flex-wrap: wrap; gap: 12px; padding: 8px 10px; border: 1px solid rgba(207,218,212,.9); border-radius: 4px; background: rgba(255,254,250,.91); color: #506366; font-size: 10px; }
+.map-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; min-height: 38px; padding: 7px 14px; border-top: 1px solid var(--line); background: #fbfcf8; color: var(--muted); font-size: 10px; }
+.map-tools label { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
+.map-tools input { accent-color: var(--green); }
+.map-tools .map-readout { margin-left: auto; font-variant-numeric: tabular-nums; }
+.map-tools .map-source { color: #82908a; }
+.legend-key { display: inline-flex; align-items: center; gap: 5px; }
+.intensity-scale { width: 76px; height: 8px; border: 1px solid rgba(38,57,51,.18); border-radius: 2px; background: linear-gradient(90deg, #308257 0%, #d6bc3a 38%, #eb9134 57%, #d24337 76%, #6f2843 100%); }
+.dot { width: 8px; height: 8px; border: 1px solid #fff; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 1px var(--blue); }
+.dot.hurricane { background: var(--coral); box-shadow: 0 0 0 1px var(--coral); }
+.dot.major { background: #9b4139; box-shadow: 0 0 0 1px #9b4139; }
+.timeline { padding: 14px 16px 15px; border-top: 1px solid var(--line); }
+.timeline-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 11px; }
+.timeline-top strong { font: 600 12px Georgia, serif; }
+.timeline-top span { color: var(--muted); font-size: 10px; }
+.months { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 4px; }
+.month { position: relative; min-width: 0; height: 29px; padding: 0; border: 1px solid #e1e6e1; border-radius: 3px; background: #f6f7f3; color: #73817e; font-size: 9px; cursor: pointer; }
+.month.active { border-color: var(--green); background: var(--green); color: #fff; }
+.month.current:after { position: absolute; right: 4px; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background: var(--amber); content: ""; }
+.month:hover:not(.active) { border-color: #9dafaa; background: #e8efeb; }
+.map-controls { display: flex; justify-content: space-between; gap: 10px; padding: 11px 15px; border-top: 1px solid var(--line); background: #fbfcf8; }
+.control-group { display: flex; gap: 7px; }
+.map-controls button { min-height: 34px; padding: 0 11px; border: 1px solid var(--line); border-radius: 4px; background: #fffefa; color: #405457; font-size: 11px; cursor: pointer; }
+.map-controls button:hover { border-color: #9fb3ac; }
+.side-panel + .side-panel { margin-top: 14px; }
+.storm-list { max-height: 315px; overflow: auto; }
+.empty-state { padding: 27px 19px; color: var(--muted); text-align: center; }
+.empty-state strong { display: block; margin-bottom: 6px; color: #405457; font: 500 16px Georgia, serif; }
+.empty-state p { margin: 0; font-size: 11px; line-height: 1.55; }
+.storm-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 15px; border-bottom: 1px solid #e8ece7; cursor: pointer; }
+.storm-row:last-child { border-bottom: 0; }
+.storm-row:hover { background: #f6f8f3; }
+.storm-name { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.storm-name strong { display: block; overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.storm-name small { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+.storm-status { flex: 0 0 auto; padding: 4px 6px; border-radius: 3px; background: #e6eeed; color: #43616a; font-size: 9px; font-weight: 700; text-transform: uppercase; }
+.storm-status.hurricane { background: #f7e5df; color: #9b473a; }
+.storm-status.major { background: #8f3e35; color: #fff; }
+.storm-detail { padding: 12px 15px; border-top: 1px solid var(--line); background: #f7f9f4; }
+.storm-detail strong { display: block; font: 600 12px Georgia, serif; }
+.storm-detail p { margin: 5px 0 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.detail-grid span { display: block; color: var(--muted); font-size: 9px; text-transform: uppercase; }
+.detail-grid strong { margin-top: 3px; font: 600 11px "Avenir Next", Avenir, sans-serif; }
+.name-roster { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; max-height: 235px; overflow: auto; padding: 5px 14px; }
+.name-entry { display: flex; align-items: center; justify-content: space-between; gap: 5px; min-width: 0; padding: 7px 1px; border-bottom: 1px solid #e8ece7; }
+.name-entry strong { overflow: hidden; font-size: 11px; font-weight: 600; text-overflow: ellipsis; }
+.name-entry span { flex: 0 0 auto; color: #7a8984; font-size: 9px; }
+.name-entry.next strong, .name-entry.next span { color: var(--coral); }
+.name-entry.named strong { color: var(--green); }
+.auxiliary-panel[hidden] { display: none; }
+.retirement-form { display: grid; gap: 10px; padding: 12px 14px; }
+.retirement-form label { display: grid; gap: 5px; color: #60736e; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.retirement-form select, .retirement-form input { width: 100%; min-height: 36px; padding: 0 9px; border: 1px solid var(--line); border-radius: 4px; background: #fffefa; color: var(--ink); font: 12px "Avenir Next", Avenir, sans-serif; letter-spacing: 0; text-transform: none; }
+.retirement-form button { min-height: 35px; border: 1px solid #a87b61; border-radius: 4px; background: #f5ede6; color: #704b37; cursor: pointer; font-size: 11px; font-weight: 650; }
+.retirement-form button:hover { border-color: #825b43; background: #eee1d5; }
+.retired-list, .activity-list { max-height: 230px; overflow: auto; padding: 4px 14px; }
+.retired-entry, .activity-entry { padding: 9px 1px; border-bottom: 1px solid #e8ece7; }
+.retired-entry:last-child, .activity-entry:last-child { border-bottom: 0; }
+.retired-entry strong { display: block; color: #754d3b; font-size: 11px; }
+.retired-entry span, .activity-entry time { display: block; margin-top: 3px; color: var(--muted); font-size: 9px; }
+.retired-entry p, .activity-entry p { margin: 4px 0 0; color: #526661; font-size: 10px; line-height: 1.45; }
+.archive-list { padding: 3px 14px 7px; }
+.archive-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 1px; border-bottom: 1px solid #e8ece7; }
+.archive-row:last-child { border-bottom: 0; }
+.archive-row strong { font: 600 12px Georgia, serif; }
+.archive-row span { color: var(--muted); font-size: 10px; }
+.archive-open { padding: 3px 6px; border: 0; background: transparent; color: var(--green); cursor: pointer; font-size: 11px; }
+.archive-open:hover { text-decoration: underline; }
+.footer { display: flex; justify-content: space-between; gap: 20px; padding: 15px 2px 0; color: #71807e; font-size: 10px; }
+.footer span:last-child { text-align: right; }
+.toast { position: fixed; right: 22px; bottom: 20px; z-index: 5; max-width: min(390px, calc(100vw - 32px)); padding: 12px 15px; transform: translateY(12px); border: 1px solid #bed2c6; border-radius: 5px; background: #f7fbf6; color: #2f5549; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: .2s ease; }
+.toast.show { transform: translateY(0); opacity: 1; }
+@media (max-width: 900px) {
+  .app { padding: 17px 17px 25px; }
+  .content { grid-template-columns: minmax(0, 1fr) 275px; gap: 11px; }
+  .metrics { grid-template-columns: repeat(4, 1fr); }
+  .metric:nth-child(4) { border-right: 0; }
+  .metric:nth-child(-n+4) { border-bottom: 1px solid var(--line); }
+}
+@media (max-width: 680px) {
+  .app { padding: 13px 12px 22px; }
+  .topbar { align-items: flex-start; flex-wrap: wrap; margin-bottom: 13px; }
+  .brand { gap: 9px; }
+  .brand-mark { width: 36px; height: 36px; }
+  .brand h1 { font-size: 15px; }
+  .brand p { font-size: 9px; }
+  .top-actions { gap: 5px; }
+  .top-actions button { min-height: 34px; padding: 0 8px; font-size: 10px; }
+  .top-actions .icon { margin-right: 3px; }
+  #appearanceButton { width: 34px; padding: 0; font-size: 0; }
+  #appearanceButton .icon { margin: 0; font-size: 15px; }
+  .overview { grid-template-columns: 1fr; gap: 9px; }
+  .season-banner { min-height: 111px; padding: 17px; }
+  .season-banner h2 { font-size: 25px; }
+  .season-progress { min-width: 105px; padding-left: 14px; }
+  .date-panel { padding: 13px 15px; }
+  .date-row strong { font-size: 21px; }
+  .metrics { margin-bottom: 10px; }
+  .conditions { margin-bottom: 10px; }
+  .condition { align-items: flex-start; flex-direction: column; gap: 3px; min-height: 49px; padding: 8px; }
+  .condition span { font-size: 8px; }
+  .condition strong { font-size: 10px; }
+  .metric { min-height: 70px; padding: 11px 12px 9px; }
+  .metric strong { font-size: 22px; }
+  .metric span { font-size: 9px; }
+  .content { grid-template-columns: 1fr; gap: 10px; }
+  .map-wrap { min-height: 300px; }
+  canvas { height: 300px; }
+  .months { gap: 3px; }
+  .month { height: 27px; font-size: 8px; }
+  .map-controls { padding: 9px; }
+  .map-controls button { min-height: 33px; padding: 0 8px; font-size: 10px; }
+  .footer { font-size: 9px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *:before, *:after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" id="brandMark" aria-hidden="true"></div>
+      <div><h1>Atlantic Season Desk</h1><p>Tropical cyclone simulator</p></div>
+    </div>
+    <div class="top-actions">
+      <button class="quiet-button" id="appearanceButton" type="button" title="Customize the season emblem and its color"><span class="icon">◉</span>Appearance</button>
+      <button class="quiet-button" id="newSeasonButton" type="button" title="Start a new season in the next calendar year"><span class="icon">↻</span>New season</button>
+      <button class="quiet-button" id="resetButton" type="button" title="Clear local simulation data"><span class="icon">⌫</span>Reset data</button>
+    </div>
+  </header>
+  <section class="overview" aria-label="Season overview">
+    <div class="season-banner">
+      <div><div class="eyebrow" id="basinNameLabel">North Atlantic basin</div><h2 id="seasonHeading">2026 hurricane season</h2><p id="seasonDateLabel">Official season: June 1 – November 30</p></div>
+      <div class="season-progress"><strong id="seasonProgress">0%</strong><span>calendar year complete</span></div>
+    </div>
+    <div class="date-panel"><div class="date-row"><span>Simulation date</span><strong id="currentDate">January 1, 2026</strong></div><p id="seasonPhase">Off-season · 151 days until the season opens</p></div>
+  </section>
+  <section class="metrics" aria-label="Season statistics">
+    <div class="metric"><span>Named storms</span><strong id="namedCount">0</strong><small>tropical or subtropical</small></div>
+    <div class="metric"><span>Hurricanes</span><strong id="hurricaneCount">0</strong><small>Category 1 or higher</small></div>
+    <div class="metric"><span>Major hurricanes</span><strong id="majorCount">0</strong><small>Category 3 or higher</small></div>
+    <div class="metric"><span>Landfalls</span><strong id="landfallCount">0</strong><small>U.S. and Caribbean basin</small></div>
+    <div class="metric"><span>Fatalities</span><strong id="fatalityCount">0</strong><small>modeled direct impacts</small></div>
+    <div class="metric"><span>Accumulated cyclone energy</span><strong id="aceCount">0.0</strong><small>ACE index</small></div>
+    <div class="metric"><span>Estimated damage</span><strong id="damageCount">$0B</strong><small>modeled direct losses</small></div>
+  </section>
+  <section class="conditions" aria-label="Basin environmental conditions">
+    <div class="condition"><span id="basinSstLabel">Tropical Atlantic SST</span><strong id="sstValue">26°C</strong></div>
+    <div class="condition"><span>Vertical wind shear</span><strong id="shearValue">Moderate</strong></div>
+    <div class="condition"><span>Development potential</span><strong id="potentialValue">Low</strong></div>
+  </section>
+  <section class="content">
+    <div class="map-panel">
+      <div class="panel-head"><h3 id="basinMapTitle">North Atlantic basin</h3><div class="basin-panel-meta"><select id="basinSelect" aria-label="Choose simulation basin"><option value="atlantic">North Atlantic</option><option value="east-pacific">Eastern Pacific</option><option value="west-pacific">Western Pacific</option><option value="north-indian">North Indian</option><option value="aster-sea">Aster Sea · fictional</option><option value="nacre-reach">Nacre Reach · fictional</option></select><span id="mapDate">January · 2026</span></div></div>
+      <div class="map-wrap"><canvas id="basinMap" aria-label="Map of simulated tropical cyclone tracks"></canvas><div class="map-legend"><span class="legend-key"><i class="intensity-scale" id="gradientLegend"></i>Lower to higher wind speed</span><span class="legend-key">Shaded area: forecast cone</span></div></div>
+      <div class="map-tools"><label><input id="showGraticule" type="checkbox" checked>Graticule</label><label><input id="showForecastCone" type="checkbox" checked>Forecast cone</label><span class="map-readout" id="mapCoordinates">Move over map for coordinates</span><span class="map-source" id="mapSource">Natural Earth coastlines</span></div>
+      <div class="timeline"><div class="timeline-top"><strong>Season calendar</strong><span id="seasonWindow">Official Atlantic season · Jun 1 – Nov 30</span></div><div class="months" id="months" aria-label="Calendar months"></div></div>
+      <div class="map-controls"><div class="control-group"><button id="nextMonth" type="button" title="Advance through the next month">Month →</button></div><div class="control-group"><button id="advanceWeek" type="button" title="Advance the simulation by seven days">+7 days</button><button class="primary-button" id="advanceDay" type="button" title="Advance the simulation by one day">Next day →</button></div></div>
+    </div>
+    <aside>
+      <section class="side-panel"><div class="panel-head"><h3>Season systems</h3><span id="systemCount">0 tracked</span></div><div class="storm-list" id="stormList"></div><div class="storm-detail" id="stormDetail"></div></section>
+      <section class="side-panel"><div class="panel-head"><h3>Official storm names</h3><span>21-name rotation</span></div><div class="name-roster" id="nameRoster"></div></section>
+      <section class="side-panel auxiliary-panel" id="auxiliaryPanel" hidden><div class="panel-head"><h3>Auxiliary names</h3><span id="auxiliaryCount">0 used</span></div><div class="name-roster" id="auxiliaryRoster"></div></section>
+      <section class="side-panel"><div class="panel-head"><h3>Retire a name</h3><span>Season desk</span></div><form class="retirement-form" id="retirementForm"><label for="retirementSelect">Name from list<select id="retirementSelect"></select></label><label for="customRetirementName">Custom name<input id="customRetirementName" maxlength="32" placeholder="Enter a custom name"></label><button type="submit">Retire name</button></form></section>
+      <section class="side-panel"><div class="panel-head"><h3>Retired names</h3><span id="retiredCount">0 retired</span></div><div class="retired-list" id="retiredList"></div></section>
+      <section class="side-panel"><div class="panel-head"><h3>Basin activity</h3><span>Latest advisories</span></div><div class="activity-list" id="activityList"></div></section>
+      <section class="side-panel"><div class="panel-head"><h3>Archived seasons</h3><span id="archiveCount">0 saved</span></div><div class="archive-list" id="archiveList"></div></section>
+    </aside>
+  </section>
+  <footer class="footer"><span>Simulation uses randomized basin activity and simplified intensity / track modeling.</span><span>Season data saves automatically in this browser.</span></footer>
+</main>
+<dialog class="appearance-dialog" id="appearanceDialog" aria-labelledby="appearanceTitle">
+  <form class="appearance-form" id="appearanceForm">
+    <h2 id="appearanceTitle">Appearance</h2>
+    <p>Choose an emblem and any color for the season desk. Your selection is saved in this browser.</p>
+    <div class="appearance-options">
+      <label for="emblemSelect">Emblem<select id="emblemSelect"><option value="cyclone">Cyclone</option><option value="eye">Hurricane eye</option><option value="wind">Wind</option><option value="wave">Wave</option><option value="cloud">Storm cloud</option><option value="sun">Sun</option><option value="compass">Compass</option><option value="star">North star</option></select></label>
+      <label for="iconColor">Emblem color<input id="iconColor" type="color" value="#26594c" aria-label="Choose an emblem color"></label>
+    </div>
+    <div class="gradient-editor"><div class="gradient-heading"><strong>Storm intensity gradient</strong><span>mph thresholds · 2–8 stops</span></div><div class="gradient-stops" id="gradientStops"></div><div class="gradient-actions"><button id="addGradientStop" type="button">+ Add color stop</button><button id="resetGradient" type="button">Reset gradient</button></div></div>
+    <label class="appearance-options storm-symbol-label" for="stormSymbolSelect">Map storm symbol<select id="stormSymbolSelect"><option value="spiral">Cyclone spiral</option><option value="bands">Spiral bands</option><option value="eye">Satellite eye</option><option value="radar">Radar marker</option><option value="custom">Draw my own</option></select></label>
+    <div class="custom-icon-editor" id="customIconEditor" hidden><span>Draw your storm symbol</span><div class="custom-icon-tools"><canvas id="customIconCanvas" width="180" height="120" aria-label="Draw a custom storm symbol"></canvas><div class="custom-icon-actions"><button id="undoIconStroke" type="button">Undo stroke</button><button id="clearIconCanvas" type="button">Clear drawing</button></div></div><small class="custom-icon-tip">The drawing is recolored to match each storm's intensity.</small></div>
+    <div class="appearance-preview"><span class="brand-mark" id="appearancePreview" aria-hidden="true"></span><span id="appearanceColorLabel">Current accent</span></div>
+    <div class="appearance-actions"><button id="cancelAppearance" type="button">Cancel</button><button class="primary-button" id="saveAppearance" type="button">Save appearance</button></div>
+  </form>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+  const STORAGE_KEY = "atlantic-season-desk-v1";
+  const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const NAMES = ["Arthur", "Bertha", "Cristobal", "Dolly", "Edouard", "Fay", "Gonzalo", "Hanna", "Isaias", "Josephine", "Kyle", "Leah", "Marco", "Nana", "Omar", "Paulette", "Rene", "Sally", "Teddy", "Vicky", "Wilfred"];
+  const AUXILIARY_NAMES = ["Avery", "Bonnie", "Colin", "Danielle", "Ethan", "Frances", "Garth", "Heather", "Ian", "Jason", "Kiana", "Luca", "Molly", "Noah", "Oliver", "Piper", "Riley", "Stella", "Taylor", "Vince", "Wanda"];
+  const NAME_REPLACEMENTS = {
+    A: ["Alicia", "Amelia", "Alexis", "Alanis", "Aon", "Ariel", "Amanda", "Aurora", "Aiden", "Alvin", "Alison", "Averol", "Aedan", "Assa", "Apollo", "Ahmed", "Aarav"], B: ["Boris", "Bianca", "Brett", "Bo", "Bart", "Billie", "Belinda", "Bogdan", "Buenaventura", "Bal", "Bae", "Bera", "Biopco", "Bolo"], C: ["Carlotta", "Cesar", "Carmen", "Cristina", "Caleb", "Cora", "Cyrus", "Cassidy", "Cody"],
+    D: ["Dorian", "Diana", "Dexter", "Dylan", "Derek", "Dana", "Dante", "Daphne", "Dominica"], E: ["Erika", "Elliot", "Estelle", "Etta", "Elena", "Evan", "Eli", "Eve", "Ezra", "Eliana", "Evelyn", "Eugene", "Eliot", "Ernest", "Esmeralda", "Ephraim", "Efrain", "Eccles", "Ernesto", "Erksoa"], F: ["Franklin", "Fiona", "Farrah", "Felice", "Fleece", "Faye", "Foster", "Fod", "Fogus", "Fae", "Fulvio", "Freddie"],
+    G: ["Gabrielle", "Gaston", "Greta", "Gustavo", "Gina", "Glen", "Gloria", "Gordon", "Genevieve", "Gaucho", "Ginevra"], H: ["Humberto", "Helene", "Hugo", "Horace", "Hugo", "Hannah", "Horacio", "Henri", "Hollis", "Hose"], I: ["Imogen", "Idris", "Iris", "Isaac", "Isabella", "Isidore", "Isaiah", "Ingrid", "Ivo", "Ilaria", "Iphigenia", "Ilyas", "Ile"],
+    J: ["Joaquin", "Jade", "Julian", "Jasmine", "Javier", "Jenna", "Jasper", "Jocelyn", "Julio", "Julius", "Joplin", "Joaquim"], K: ["Karen", "Kirk", "Kendra", "Kian", "Kai", "Kira", "Klaus", "Klara", "Kloe", "Kane", "Keefe", "Koa", "Kauai"], L: ["Lorenzo", "Lisa", "Liam", "Lucas", "Luc", "Loa", "Laden", "Lena", "Lospe", "Luis"],
+    M: ["Melissa", "Mitch", "Maya", "Miguel", "Marta", "Morgan", "Miles", "Mia", "Mao", "Moai", "Milo", "Mulan", "Mona", "Mai", "Mio", "Mei", "Medea"], N: ["Nadine", "Nestor", "Nia", "Noa", "Nolan", "Naomi", "Norah", "Noloh", "Noelle", "Niana", "Nua", "Nero"], O: ["Otto", "Odette", "Owen", "Olive", "Olioe", "Oire", "Ophelia", "Owe"],
+    P: ["Patty", "Pablo", "Paula", "Pedro", "Pilar", "Poe", "Paak"], R: ["Rafael", "Rose", "Rico", "Rudy", "Reuben", "Rebecca", "Reason", "Romeo", "Rufus"], S: ["Shary", "Sam", "Sonia", "Sebastian", "Silvia", "Stefan", "Sylvie", "Selena", "Sofia"],
+    T: ["Tammy", "Tomas", "Talia"], V: ["Valerie", "Victor", "Vera"], W: ["Wendy", "Walter", "Whitney"]
+  };
+  const DEFAULT_WIND_GRADIENT = [[0, "#308257"], [58, "#d6bc3a"], [74, "#eb9134"], [111, "#d24337"], [190, "#6f2843"]];
+  const MONTHLY_SST = [24.5, 24.5, 24.7, 25.3, 26.1, 27.1, 28.0, 28.5, 28.4, 27.5, 26.3, 25.2];
+  const MONTHLY_SHEAR = [20, 20, 19, 18, 16, 13, 11, 9, 9, 11, 15, 18];
+  const MONTHLY_GENESIS_RATE = [0.025, 0.025, 0.04, 0.06, 0.11, 0.7, 1.4, 3.1, 4.2, 2.5, 0.8, 0.08];
+  const EMBLEM_SVGS = {
+    cyclone: '<svg viewBox="0 0 32 32" fill="none"><path d="M16 4c4 4 3 8-1 11-2 2-1 4 2 5 4 1 7-2 7-6 4 5 3 12-2 15-6 4-15 0-15-8 0-5 4-8 6-11 1-2 2-4 3-6Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 25c-1-3 1-5 3-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
+    eye: '<svg viewBox="0 0 32 32" fill="none"><path d="M3 16s4.5-8 13-8 13 8 13 8-4.5 8-13 8S3 16 3 16Z" stroke="currentColor" stroke-width="1.8"/><circle cx="16" cy="16" r="4" stroke="currentColor" stroke-width="1.8"/><circle cx="16" cy="16" r="1" fill="currentColor"/></svg>',
+    wind: '<svg viewBox="0 0 32 32" fill="none"><path d="M4 10h17a4 4 0 1 0-4-4M3 16h23a3 3 0 1 1-3 3M5 22h13a4 4 0 1 1-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+    wave: '<svg viewBox="0 0 32 32" fill="none"><path d="M3 12c4 0 4-4 8-4s4 4 8 4 4-4 8-4M3 19c4 0 4-4 8-4s4 4 8 4 4-4 8-4M3 26c4 0 4-4 8-4s4 4 8 4 4-4 8-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+    cloud: '<svg viewBox="0 0 32 32" fill="none"><path d="M8 24a6 6 0 0 1-.7-12A9 9 0 0 1 24 10a7 7 0 0 1 1 14H8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m12 18-2 4m9-4-2 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+    sun: '<svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="6" stroke="currentColor" stroke-width="1.8"/><path d="M16 3v4m0 18v4M3 16h4m18 0h4M6.8 6.8l2.8 2.8m12.8 12.8 2.8 2.8m0-18.4-2.8 2.8M9.6 22.4l-2.8 2.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+    compass: '<svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="12" stroke="currentColor" stroke-width="1.8"/><path d="m20.5 11.5-3 7-7 3 3-7 7-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+    star: '<svg viewBox="0 0 32 32" fill="none"><path d="m16 3 3.4 8.6L28 15l-8.6 3.4L16 27l-3.4-8.6L4 15l8.6-3.4L16 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="16" cy="15" r="2" fill="currentColor"/></svg>'
+  };
+  const LAND_ZONES = [
+    { name: "the Lesser Antilles", lon: [-63, -59], lat: [12, 19] },
+    { name: "Puerto Rico", lon: [-68, -65], lat: [17, 19] },
+    { name: "Hispaniola", lon: [-74.8, -68], lat: [17, 20] },
+    { name: "Cuba", lon: [-85, -74], lat: [19, 23] },
+    { name: "the Bahamas", lon: [-79, -72], lat: [22, 27] },
+    { name: "Florida", lon: [-82, -79], lat: [24, 31] },
+    { name: "the U.S. Gulf Coast", lon: [-97, -82], lat: [25, 30] },
+    { name: "the U.S. East Coast", lon: [-80, -70], lat: [30, 39] },
+    { name: "Central America", lon: [-90, -82], lat: [8, 18] },
+    { name: "the Yucatan Peninsula", lon: [-92, -86], lat: [17, 22] }
+  ];
+  const BASINS = {
+    atlantic: { title: "North Atlantic basin", season: "Jun 1 – Nov 30", activeMonths: [5, 6, 7, 8, 9, 10], bounds: [-102, -7, 4, 52], genesisLon: [-80, -55], genesisLat: [10, 29], rateScale: 1, sstOffset: 0, shearOffset: 0, motion: -1 },
+    "east-pacific": { title: "Eastern Pacific basin", season: "May 15 – Nov 30", activeMonths: [4, 5, 6, 7, 8, 9, 10], bounds: [-150, -70, 0, 55], genesisLon: [-120, -92], genesisLat: [8, 20], rateScale: 0.9, sstOffset: 0.4, shearOffset: 0, motion: -1 },
+    "west-pacific": { title: "Western Pacific basin", season: "Year-round · peak Jul–Oct", activeMonths: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], bounds: [100, 180, -5, 55], genesisLon: [128, 158], genesisLat: [7, 22], rateScale: 1.9, sstOffset: 0.6, shearOffset: -1, motion: -1 },
+    "north-indian": { title: "North Indian basin", season: "Apr–Dec · peaks May and Oct–Nov", activeMonths: [3, 4, 5, 9, 10, 11], bounds: [40, 110, -5, 40], genesisLon: [65, 92], genesisLat: [5, 18], rateScale: 0.75, sstOffset: -0.2, shearOffset: 1, motion: -1 },
+    "aster-sea": { title: "Aster Sea · fictional basin", season: "May–Nov · peak Sep", activeMonths: [4, 5, 6, 7, 8, 9, 10], bounds: [-102, -7, 4, 52], genesisLon: [-78, -48], genesisLat: [9, 25], rateScale: 0.95, sstOffset: 0.2, shearOffset: -1, motion: -1 },
+    "nacre-reach": { title: "Nacre Reach · fictional basin", season: "Jun–Dec · peak Oct", activeMonths: [5, 6, 7, 8, 9, 10, 11], bounds: [-102, -7, 4, 52], genesisLon: [-72, -43], genesisLat: [8, 22], rateScale: 1.1, sstOffset: 0.5, shearOffset: 0, motion: -1 }
+  };
+  const REGIONAL_LAND = {
+    "east-pacific": [
+      [[-150, 55], [-125, 55], [-124, 48], [-123, 42], [-124, 38], [-122, 34], [-117, 32], [-114, 29], [-110, 24], [-107, 22], [-103, 19], [-99, 17], [-95, 15], [-90, 14], [-86, 11], [-80, 8], [-82, 18], [-91, 23], [-103, 28], [-114, 34], [-126, 40], [-140, 47]],
+      [[-110, 30], [-108, 31], [-108, 25], [-110, 24]], [[-90, 16], [-84, 16], [-83, 10], [-88, 12]]
+    ],
+    "west-pacific": [
+      [[100, 55], [125, 55], [130, 50], [135, 47], [140, 43], [145, 42], [145, 38], [140, 35], [137, 32], [132, 30], [130, 25], [125, 22], [122, 18], [120, 12], [118, 8], [112, 5], [108, 10], [105, 18], [100, 22]],
+      [[112, -5], [154, -5], [153, -10], [148, -17], [140, -20], [130, -17], [120, -12]],
+      [[130, 33], [132, 34], [134, 33], [135, 35], [137, 36], [140, 39], [138, 41], [135, 39], [133, 37]],
+      [[120, 18], [122, 19], [124, 18], [123, 15], [121, 14]]
+    ],
+    "north-indian": [
+      [[40, 40], [52, 40], [55, 33], [50, 25], [49, 16], [44, 12], [42, 18]],
+      [[60, 25], [68, 25], [73, 22], [77, 18], [80, 10], [84, 8], [87, 12], [91, 19], [96, 22], [100, 28], [105, 32], [110, 40]],
+      [[80, 8], [84, 7], [88, 8], [86, 5], [82, 5]]
+    ],
+    "aster-sea": [
+      [[-100, 52], [-82, 52], [-81, 44], [-78, 40], [-80, 34], [-86, 28], [-93, 25], [-100, 30]],
+      [[-30, 52], [-8, 52], [-8, 38], [-18, 35], [-27, 40]],
+      [[-73, 15], [-70, 17], [-67, 16], [-68, 13]], [[-52, 27], [-49, 29], [-46, 27], [-48, 24]], [[-37, 10], [-35, 12], [-32, 10], [-34, 8]]
+    ],
+    "nacre-reach": [
+      [[-102, 52], [-87, 52], [-86, 44], [-83, 38], [-85, 32], [-92, 26], [-100, 28]],
+      [[-25, 52], [-7, 52], [-7, 41], [-16, 38], [-23, 43]],
+      [[-64, 13], [-61, 15], [-58, 13], [-60, 10]], [[-48, 25], [-45, 28], [-42, 26], [-44, 23]], [[-38, 17], [-35, 19], [-33, 17], [-35, 15]]
+    ]
+  };
+  const BASIN_LAND_ZONES = {
+    atlantic: LAND_ZONES,
+    "east-pacific": [
+      { name: "Baja California", lon: [-117, -108], lat: [22, 33] },
+      { name: "western Mexico", lon: [-110, -96], lat: [15, 25] },
+      { name: "Central America", lon: [-94, -77], lat: [7, 18] }
+    ],
+    "west-pacific": [
+      { name: "the Philippines", lon: [117, 127], lat: [5, 20] },
+      { name: "Taiwan", lon: [120, 122], lat: [21, 26] },
+      { name: "Japan", lon: [130, 146], lat: [30, 45] },
+      { name: "eastern China", lon: [108, 124], lat: [20, 35] },
+      { name: "Vietnam", lon: [102, 110], lat: [8, 24] },
+      { name: "northern Australia", lon: [112, 154], lat: [-20, -10] }
+    ],
+    "north-indian": [
+      { name: "eastern India", lon: [80, 90], lat: [8, 25] },
+      { name: "Bangladesh", lon: [88, 93], lat: [20, 27] },
+      { name: "Myanmar", lon: [92, 100], lat: [10, 25] },
+      { name: "Oman", lon: [52, 60], lat: [15, 25] },
+      { name: "western India", lon: [68, 75], lat: [8, 24] }
+    ],
+    "aster-sea": [
+      { name: "the Aster Isles", lon: [-73, -67], lat: [12, 18] },
+      { name: "North Aster", lon: [-52, -46], lat: [24, 30] }
+    ],
+    "nacre-reach": [
+      { name: "the Nacre Keys", lon: [-64, -57], lat: [10, 16] },
+      { name: "South Nacre", lon: [-47, -41], lat: [22, 29] }
+    ]
+  };
+  const $ = (id) => document.getElementById(id);
+  const canvas = $("basinMap");
+  const ctx = canvas.getContext("2d");
+  const customIconCanvas = $("customIconCanvas");
+  const customIconCtx = customIconCanvas.getContext("2d");
+  let countryPolygons = null;
+  const defaults = () => ({ ...createBasinProfile(), currentBasinId: "atlantic", basins: {}, preferences: { emblem: "cyclone", iconColor: "#26594c", stormSymbol: "spiral", customIconStrokes: [], windGradient: DEFAULT_WIND_GRADIENT.map((stop) => [...stop]), showGraticule: true, showForecastCone: true } });
+
+  function freshStats() {
+    return { named: 0, hurricanes: 0, major: 0, landfalls: 0, ace: 0, damage: 0, deaths: 0, disturbances: 0 };
+  }
+  function normalizeGradient(gradient) {
+    const stops = Array.isArray(gradient) ? gradient
+      .filter((stop) => Array.isArray(stop) && Number.isFinite(Number(stop[0])) && /^#[\da-f]{6}$/i.test(stop[1] || ""))
+      .map((stop) => [Math.max(0, Math.min(250, Number(stop[0]))), stop[1]])
+      .sort((a, b) => a[0] - b[0]) : [];
+    const uniqueStops = stops.filter((stop, index) => index === 0 || stop[0] > stops[index - 1][0]).slice(0, 8);
+    return uniqueStops.length >= 2 ? uniqueStops : DEFAULT_WIND_GRADIENT.map((stop) => [...stop]);
+  }
+  function createBasinProfile() {
+    return { date: [2026, 0, 1], stats: freshStats(), storms: [], history: [], retirements: [], activity: 0.85 + Math.random() * 0.3, annualTempAnomaly: Math.random() * 1.6 - 0.8, dailyTempAnomaly: 0, log: [] };
+  }
+  function copyActiveProfile(state) {
+    return { date: state.date, stats: state.stats, storms: state.storms, history: state.history, retirements: state.retirements, activity: state.activity, annualTempAnomaly: state.annualTempAnomaly, dailyTempAnomaly: state.dailyTempAnomaly, log: state.log };
+  }
+  function loadState() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (saved && Array.isArray(saved.date) && saved.stats && Array.isArray(saved.storms) && Array.isArray(saved.history)) {
+        saved.retirements = Array.isArray(saved.retirements) ? saved.retirements : [];
+        saved.activity = Number.isFinite(saved.activity) ? saved.activity : 1;
+        saved.annualTempAnomaly = Number.isFinite(saved.annualTempAnomaly) ? saved.annualTempAnomaly : Math.random() * 1.6 - 0.8;
+        saved.dailyTempAnomaly = Number.isFinite(saved.dailyTempAnomaly) ? saved.dailyTempAnomaly : 0;
+        saved.preferences = saved.preferences && typeof saved.preferences === "object" ? saved.preferences : {};
+        if (!Object.hasOwn(EMBLEM_SVGS, saved.preferences.emblem)) saved.preferences.emblem = "cyclone";
+        if (!/^#[\da-f]{6}$/i.test(saved.preferences.iconColor || "")) saved.preferences.iconColor = "#26594c";
+        if (!new Set(["spiral", "bands", "eye", "radar", "custom"]).has(saved.preferences.stormSymbol)) saved.preferences.stormSymbol = "spiral";
+        saved.preferences.customIconStrokes = Array.isArray(saved.preferences.customIconStrokes) ? saved.preferences.customIconStrokes : [];
+        saved.preferences.windGradient = normalizeGradient(saved.preferences.windGradient);
+        saved.preferences.showGraticule = saved.preferences.showGraticule !== false;
+        saved.preferences.showForecastCone = saved.preferences.showForecastCone !== false;
+        saved.currentBasinId = BASINS[saved.currentBasinId] ? saved.currentBasinId : "atlantic";
+        saved.basins = saved.basins && typeof saved.basins === "object" ? saved.basins : {};
+        if (!saved.basins[saved.currentBasinId]) saved.basins[saved.currentBasinId] = copyActiveProfile(saved);
+        else Object.assign(saved, saved.basins[saved.currentBasinId]);
+        return saved;
+      }
+    } catch (error) { console.warn("Could not load saved season data", error); }
+    return defaults();
+  }
+  let state = loadState();
+  let toastTimer;
+  let selectedStormId = null;
+  let appearanceDraft = null;
+  let customIconDraft = [];
+  let activeCustomStroke = null;
+
+  function basinConfig() { return BASINS[state.currentBasinId] || BASINS.atlantic; }
+  async function loadCoastlines() {
+    $("mapSource").textContent = "Loading detailed coastlines…";
+    try {
+      const response = await fetch("https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson");
+      if (!response.ok) throw new Error(`Map data request failed: ${response.status}`);
+      const data = await response.json();
+      countryPolygons = (data.features || []).flatMap((feature) => {
+        const geometry = feature.geometry;
+        if (!geometry?.coordinates) return [];
+        const polygons = geometry.type === "Polygon" ? [geometry.coordinates] : geometry.type === "MultiPolygon" ? geometry.coordinates : [];
+        return polygons.map((polygon) => ({ ring: polygon[0], name: feature.properties?.ADMIN || "" })).filter((polygon) => polygon.ring?.length >= 4);
+      });
+      $("mapSource").textContent = "Natural Earth coastlines & borders · public domain";
+      drawMap();
+    } catch (error) {
+      countryPolygons = null;
+      $("mapSource").textContent = "Built-in map outlines · offline mode";
+      console.warn("Detailed coastlines unavailable; using built-in outlines.", error);
+    }
+  }
+  function saveCurrentBasin() {
+    if (!state.basins) state.basins = {};
+    state.basins[state.currentBasinId] = copyActiveProfile(state);
+  }
+  function save() {
+    try { saveCurrentBasin(); localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    catch (error) { showToast("Browser storage is full; this update could not be saved."); }
+  }
+  function switchBasin(basinId) {
+    if (!BASINS[basinId] || basinId === state.currentBasinId) return;
+    saveCurrentBasin();
+    state.currentBasinId = basinId;
+    state.basins[basinId] ||= createBasinProfile();
+    Object.assign(state, state.basins[basinId]);
+    selectedStormId = null;
+    save();
+    render();
+  }
+  function dateOf(parts = state.date) { return new Date(parts[0], parts[1], parts[2], 12); }
+  function formatDate(date) { return `${MONTHS[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`; }
+  function currentYear() { return state.date[0]; }
+  function currentMonth() { return state.date[1]; }
+  function isInSeason(month) { return basinConfig().activeMonths.includes(month); }
+  function getNamePools() {
+    const retired = new Set(state.retirements.map((entry) => entry.name.toLowerCase()));
+    const allPoolNames = [...NAMES, ...AUXILIARY_NAMES];
+    const reserved = new Set(allPoolNames.filter((name) => !retired.has(name.toLowerCase())).map((name) => name.toLowerCase()));
+    const assigned = new Set();
+    const resolvePool = (pool) => pool.map((name) => {
+      if (!retired.has(name.toLowerCase())) return name;
+      const retirement = state.retirements.find((entry) => entry.name.toLowerCase() === name.toLowerCase());
+      const candidates = [retirement?.replacement, ...(NAME_REPLACEMENTS[name[0].toUpperCase()] || [])].filter((candidate) => candidate && candidate !== "No list replacement");
+      const replacement = candidates.find((candidate) => !retired.has(candidate.toLowerCase()) && !reserved.has(candidate.toLowerCase()) && !assigned.has(candidate.toLowerCase()));
+      if (!replacement) return name;
+      assigned.add(replacement.toLowerCase());
+      return replacement;
+    });
+    return { official: resolvePool(NAMES), auxiliary: resolvePool(AUXILIARY_NAMES) };
+  }
+  function getSeasonNames() { return getNamePools().official; }
+  function getAuxiliaryNames() { return getNamePools().auxiliary; }
+  function nextStormName() {
+    const index = state.stats.named;
+    if (index < NAMES.length) return getSeasonNames()[index];
+    const auxiliaryIndex = index - NAMES.length;
+    return getAuxiliaryNames()[auxiliaryIndex] || `Supplemental ${index + 1}`;
+  }
+  function findReplacement(name) {
+    const retired = new Set(state.retirements.map((entry) => entry.name.toLowerCase()));
+    const used = new Set(state.retirements.map((entry) => entry.replacement?.toLowerCase()).filter(Boolean));
+    [...NAMES, ...AUXILIARY_NAMES].filter((candidate) => !retired.has(candidate.toLowerCase())).forEach((candidate) => used.add(candidate.toLowerCase()));
+    return (NAME_REPLACEMENTS[name[0].toUpperCase()] || []).find((candidate) => !retired.has(candidate.toLowerCase()) && !used.has(candidate.toLowerCase())) || "No list replacement";
+  }
+  function retireName(name, year, reason) {
+    const normalized = name.trim().replace(/\s+/g, " ");
+    if (!normalized || state.retirements.some((entry) => entry.name.toLowerCase() === normalized.toLowerCase())) return false;
+    const retirement = { name: normalized, year, reason, replacement: findReplacement(normalized) };
+    state.retirements.push(retirement);
+    logEvent(`${normalized} retired; ${retirement.replacement} is the replacement.`);
+    return true;
+  }
+  function stormName(storm) { return storm.name || `Invest ${String(storm.investNumber).padStart(2, "0")}L`; }
+  function environmentFor(month, latitude = 18) {
+    const config = basinConfig();
+    const annualAnomaly = state.annualTempAnomaly || 0;
+    const dailyAnomaly = state.dailyTempAnomaly || 0;
+    const sst = Math.round((MONTHLY_SST[month] + config.sstOffset + annualAnomaly + dailyAnomaly - Math.abs(latitude - 18) * 0.045) * 10) / 10;
+    const shear = Math.max(5, Math.round(MONTHLY_SHEAR[month] + config.shearOffset + Math.abs(latitude - 18) * 0.18));
+    const humidity = Math.max(48, Math.min(90, Math.round(69 + (sst - 25) * 3 - (shear - 10) * 0.6)));
+    return { sst, shear, humidity };
+  }
+  function isLand(lon, lat) {
+    const zones = BASIN_LAND_ZONES[state.currentBasinId] || [];
+    return zones.some((area) => lon >= area.lon[0] && lon <= area.lon[1] && lat >= area.lat[0] && lat <= area.lat[1]);
+  }
+  function windLabel(wind) {
+    const mph = Math.round(wind * 1.15078);
+    if (wind >= 137) return `Category 5 · ${mph} mph`;
+    if (wind >= 113) return `Category 4 · ${mph} mph`;
+    if (wind >= 96) return `Category 3 · ${mph} mph`;
+    if (wind >= 83) return `Category 2 · ${mph} mph`;
+    if (wind >= 64) return `Category 1 · ${mph} mph`;
+    if (wind >= 34) return `Tropical storm · ${mph} mph`;
+    return `Tropical depression · ${mph} mph`;
+  }
+  function windMph(windKnots) { return Math.round(windKnots * 1.15078); }
+  function category(wind) {
+    if (wind >= 137) return 5;
+    if (wind >= 113) return 4;
+    if (wind >= 96) return 3;
+    if (wind >= 83) return 2;
+    if (wind >= 64) return 1;
+    return 0;
+  }
+  function stormClass(storm) { return category(storm.wind) >= 3 ? "major" : category(storm.wind) > 0 ? "hurricane" : ""; }
+  function logEvent(text) {
+    state.log.unshift({ date: [...state.date], text });
+    if (state.log.length > 50) state.log.length = 50;
+  }
+  function gaussian() {
+    const a = Math.random() || 0.0001;
+    const b = Math.random();
+    return Math.sqrt(-2 * Math.log(a)) * Math.cos(2 * Math.PI * b);
+  }
+  function createStorm() {
+    state.stats.disturbances += 1;
+    const namedChance = isInSeason(currentMonth()) ? 0.98 : 0.75;
+    if (Math.random() > namedChance) {
+      logEvent("A tropical disturbance formed but did not become a named storm.");
+      return;
+    }
+    const month = currentMonth();
+    const config = basinConfig();
+    const lon = config.genesisLon[0] + Math.random() * (config.genesisLon[1] - config.genesisLon[0]);
+    const lat = config.genesisLat[0] + Math.random() * (config.genesisLat[1] - config.genesisLat[0]);
+    const startWind = Math.random() < 0.38 ? 35 + Math.floor(Math.random() * 13) : 25 + Math.floor(Math.random() * 9);
+    const name = startWind >= 34 ? nextStormName() : null;
+    const storm = { id: `${currentYear()}-${state.stats.disturbances}`, investNumber: 90 + ((state.stats.disturbances - 1) % 10), name, wind: startWind, lon, lat, days: 0, active: true, landfall: false, landfalls: [], maxWind: startWind, minPressure: 1013 - Math.max(0, startWind - 20) * 0.48, track: [{ lon, lat }], formed: [...state.date], dissipated: null, damage: 0, deaths: 0, surge: 0, rainfall: 0, environment: environmentFor(month, lat) };
+    state.storms.unshift(storm);
+    if (name) {
+      state.stats.named += 1;
+      logEvent(`${name} formed as a tropical storm.`);
+    } else logEvent(`${stormName(storm)} formed as a tropical depression.`);
+  }
+  function checkLandfall(storm, previous) {
+    const landZones = BASIN_LAND_ZONES[state.currentBasinId] || [];
+    const zone = landZones.find((area) => storm.lon >= area.lon[0] && storm.lon <= area.lon[1] && storm.lat >= area.lat[0] && storm.lat <= area.lat[1] && (previous.lon < area.lon[0] || previous.lon > area.lon[1] || previous.lat < area.lat[0] || previous.lat > area.lat[1]));
+    if (!zone || storm.wind < 34 || (storm.landfalls || []).includes(zone.name)) return false;
+    if (!Array.isArray(storm.landfalls)) storm.landfalls = [];
+    storm.landfalls.push(zone.name);
+    storm.landfall = true;
+    state.stats.landfalls += 1;
+    const scale = Math.max(0.25, storm.wind / 75);
+    const damage = Math.round((0.05 + Math.pow(scale, 2.2) * (0.25 + Math.random() * 4.5)) * 10) / 10;
+    const deaths = Math.min(250, Math.max(0, Math.round(Math.pow(scale, 1.5) * Math.random() * 120)));
+    storm.damage = Math.round(((storm.damage || 0) + damage) * 10) / 10;
+    storm.deaths = (storm.deaths || 0) + deaths;
+    storm.surge = Math.max(storm.surge || 0, Math.round(Math.max(0, (storm.wind - 35) * 0.02) * 10) / 10);
+    storm.rainfall = Math.max(storm.rainfall || 0, Math.round(14 + storm.wind * 0.22 + Math.random() * 12));
+    state.stats.damage = Math.round((state.stats.damage + damage) * 10) / 10;
+    state.stats.deaths += deaths;
+    logEvent(`${stormName(storm)} made landfall near ${zone.name} as ${windLabel(storm.wind)}; ${storm.rainfall} in of rain, ${storm.surge} m peak surge, $${damage}B damage.`);
+    return true;
+  }
+  function updateStorm(storm) {
+    const previous = { lon: storm.lon, lat: storm.lat };
+    storm.days += 1;
+    storm.environment = environmentFor(currentMonth(), storm.lat);
+    const environmentBoost = (storm.environment.sst - 27) * 1.2 - (storm.environment.shear - 10) * 0.35;
+    const change = Math.round(gaussian() * 9 + environmentBoost);
+    storm.wind = Math.max(15, Math.min(155, storm.wind + change));
+    storm.maxWind = Math.max(storm.maxWind, storm.wind);
+    storm.minPressure = Math.min(storm.minPressure || 1013, 1013 - Math.max(0, storm.wind - 20) * 0.48);
+    storm.lon += basinConfig().motion * (0.7 + Math.random() * 1.5);
+    storm.lat += (storm.lat < 25 ? 0.1 : 0.55) + gaussian() * 0.5;
+    storm.track.push({ lon: storm.lon, lat: storm.lat });
+    if (storm.track.length > 30) storm.track.shift();
+    if (!storm.name && storm.wind >= 34) {
+      storm.name = nextStormName();
+      state.stats.named += 1;
+      logEvent(`${storm.name} strengthened from a tropical depression and was named.`);
+    }
+    checkLandfall(storm, previous);
+    if (isLand(storm.lon, storm.lat)) storm.wind = Math.max(15, storm.wind - 7);
+    if (storm.wind >= 64 && !storm.countedHurricane) {
+      storm.countedHurricane = true;
+      state.stats.hurricanes += 1;
+      logEvent(`${stormName(storm)} strengthened to hurricane intensity.`);
+    }
+    if (storm.wind >= 96 && !storm.countedMajor) {
+      storm.countedMajor = true;
+      state.stats.major += 1;
+      logEvent(`${stormName(storm)} became a major hurricane.`);
+    }
+    if (storm.wind >= 34) state.stats.ace += (storm.wind * storm.wind) / 2500;
+    const bounds = basinConfig().bounds;
+    if (storm.days >= 5 + Math.floor(Math.random() * 11) || storm.wind < 20 || storm.lon < bounds[0] || storm.lon > bounds[1] || storm.lat < bounds[2] || storm.lat > bounds[3]) {
+      storm.active = false;
+      storm.dissipated = [...state.date];
+      logEvent(`${stormName(storm)} dissipated after ${storm.days} days.`);
+    }
+  }
+  function simulateDay() {
+    state.storms.filter((storm) => storm.active).forEach(updateStorm);
+    const month = currentMonth();
+    const dailyRate = MONTHLY_GENESIS_RATE[month] * basinConfig().rateScale * state.activity * 1.5 / new Date(currentYear(), month + 1, 0).getDate();
+    if (state.storms.filter((storm) => storm.active).length < 3 && Math.random() < dailyRate) createStorm();
+    state.storms = state.storms.slice(0, 36);
+  }
+  function archiveSeason(year) {
+    state.storms.forEach((storm) => {
+      const damage = storm.damage || 0;
+      const deaths = storm.deaths || 0;
+      if (!storm.name || (damage < 12 && deaths < 50)) return;
+      retireName(storm.name, year, deaths >= 50 ? `${deaths} modeled fatalities` : `$${damage.toFixed(1)}B modeled damage`);
+    });
+    const season = { year, stats: { ...state.stats }, storms: state.storms.map((storm) => ({ ...storm })), environment: { annualTempAnomaly: state.annualTempAnomaly }, savedAt: new Date().toISOString() };
+    state.history = state.history.filter((item) => item.year !== season.year);
+    state.history.unshift(season);
+    state.history.sort((a, b) => b.year - a.year);
+    state.stats = freshStats();
+    state.storms = [];
+    state.activity = 0.85 + Math.random() * 0.3;
+    state.annualTempAnomaly = Math.random() * 1.6 - 0.8;
+    state.dailyTempAnomaly = 0;
+    state.log = [];
+    logEvent(`A new season began. ${season.year} stats are saved in the archive.`);
+    showToast(`${season.year} season archived. ${season.year + 1} stats are reset.`);
+  }
+  function advanceOneDay() {
+    const completedYear = currentYear();
+    const direction = Math.random() < 0.5 ? -0.1 : 0.1;
+    let dailyAnomaly = state.dailyTempAnomaly + direction;
+    if (dailyAnomaly > 0.6) dailyAnomaly = state.dailyTempAnomaly - 0.1;
+    if (dailyAnomaly < -0.6) dailyAnomaly = state.dailyTempAnomaly + 0.1;
+    state.dailyTempAnomaly = Math.round(dailyAnomaly * 10) / 10;
+    simulateDay();
+    const date = dateOf();
+    date.setDate(date.getDate() + 1);
+    state.date = [date.getFullYear(), date.getMonth(), date.getDate()];
+    if (date.getMonth() === 0 && date.getDate() === 1) archiveSeason(completedYear);
+    save();
+    render();
+  }
+  function advanceToMonth(targetMonth) {
+    const originalYear = currentYear();
+    const targetYear = targetMonth < currentMonth() ? originalYear + 1 : originalYear;
+    let steps = 0;
+    while (steps < 370 && (currentYear() < targetYear || currentMonth() !== targetMonth)) {
+      advanceOneDay();
+      steps += 1;
+    }
+  }
+  function progressMonth() {
+    const month = currentMonth();
+    const year = currentYear();
+    while (currentYear() === year && currentMonth() === month) advanceOneDay();
+  }
+  function applyAppearance(preferences) {
+    const emblem = Object.hasOwn(EMBLEM_SVGS, preferences.emblem) ? preferences.emblem : "cyclone";
+    const color = /^#[\da-f]{6}$/i.test(preferences.iconColor || "") ? preferences.iconColor : "#26594c";
+    document.documentElement.style.setProperty("--green", color);
+    [$("brandMark"), $("appearancePreview")].forEach((element) => {
+      element.innerHTML = EMBLEM_SVGS[emblem];
+      element.style.backgroundColor = color;
+    });
+    $("appearanceColorLabel").textContent = color.toUpperCase();
+  }
+  function previewAppearance() {
+    if (!appearanceDraft) appearanceDraft = { ...state.preferences };
+    appearanceDraft.emblem = $("emblemSelect").value;
+    appearanceDraft.iconColor = $("iconColor").value;
+    appearanceDraft.stormSymbol = $("stormSymbolSelect").value;
+    appearanceDraft.customIconStrokes = customIconDraft;
+    applyAppearance(appearanceDraft);
+    renderGradientLegend(appearanceDraft.windGradient);
+    drawMap();
+  }
+  function renderGradientEditor() {
+    const container = $("gradientStops");
+    container.replaceChildren();
+    normalizeGradient(appearanceDraft?.windGradient || state.preferences.windGradient).forEach(([mph, color], index) => {
+      const row = document.createElement("div");
+      row.className = "gradient-stop";
+      const speedLabel = document.createElement("label");
+      speedLabel.textContent = "mph";
+      const speedInput = document.createElement("input");
+      speedInput.type = "number";
+      speedInput.min = "0";
+      speedInput.max = "250";
+      speedInput.value = mph;
+      speedInput.dataset.index = index;
+      speedInput.dataset.kind = "speed";
+      speedInput.setAttribute("aria-label", `Gradient stop ${index + 1} speed in mph`);
+      speedLabel.append(speedInput);
+      const colorInput = document.createElement("input");
+      colorInput.type = "color";
+      colorInput.value = color;
+      colorInput.dataset.index = index;
+      colorInput.dataset.kind = "color";
+      colorInput.setAttribute("aria-label", `Gradient stop ${index + 1} color`);
+      const removeButton = document.createElement("button");
+      removeButton.type = "button";
+      removeButton.dataset.index = index;
+      removeButton.title = `Remove ${mph} mph color stop`;
+      removeButton.setAttribute("aria-label", `Remove ${mph} mph color stop`);
+      removeButton.textContent = "×";
+      removeButton.disabled = normalizeGradient(appearanceDraft?.windGradient || state.preferences.windGradient).length <= 2;
+      row.append(speedLabel, colorInput, removeButton);
+      container.append(row);
+    });
+    $("addGradientStop").disabled = normalizeGradient(appearanceDraft?.windGradient || state.preferences.windGradient).length >= 8;
+  }
+  function commitGradientEdit(event) {
+    const target = event.target;
+    if (!target.dataset?.kind) return;
+    const index = Number(target.dataset.index);
+    const gradient = appearanceDraft.windGradient.map((stop) => [...stop]);
+    gradient[index][target.dataset.kind === "speed" ? 0 : 1] = target.dataset.kind === "speed" ? Number(target.value) : target.value;
+    appearanceDraft.windGradient = normalizeGradient(gradient);
+    renderGradientEditor();
+    previewAppearance();
+  }
+  function removeGradientStop(event) {
+    const button = event.target.closest(".gradient-stop button");
+    if (!button) return;
+    const gradient = appearanceDraft.windGradient.filter((_, index) => index !== Number(button.dataset.index));
+    if (gradient.length >= 2) appearanceDraft.windGradient = normalizeGradient(gradient);
+    renderGradientEditor();
+    previewAppearance();
+  }
+  function addGradientStop() {
+    const gradient = normalizeGradient(appearanceDraft?.windGradient || state.preferences.windGradient).map((stop) => [...stop]);
+    if (gradient.length >= 8) return;
+    const upperIndex = Math.ceil(gradient.length / 2);
+    const lower = gradient[Math.max(0, upperIndex - 1)];
+    const upper = gradient[Math.min(gradient.length - 1, upperIndex)];
+    const midpoint = Math.round((lower[0] + upper[0]) / 2);
+    gradient.push([midpoint, lower[1]]);
+    appearanceDraft.windGradient = normalizeGradient(gradient);
+    renderGradientEditor();
+    previewAppearance();
+  }
+  function drawCustomIconEditor() {
+    customIconCtx.clearRect(0, 0, customIconCanvas.width, customIconCanvas.height);
+    customIconCtx.strokeStyle = $("iconColor").value || "#26594c";
+    customIconCtx.lineWidth = 5;
+    customIconCtx.lineCap = "round";
+    customIconCtx.lineJoin = "round";
+    customIconDraft.forEach((stroke) => {
+      if (stroke.length < 2) return;
+      customIconCtx.beginPath();
+      stroke.forEach((point, index) => {
+        const x = point[0] * customIconCanvas.width;
+        const y = point[1] * customIconCanvas.height;
+        if (index === 0) customIconCtx.moveTo(x, y); else customIconCtx.lineTo(x, y);
+      });
+      customIconCtx.stroke();
+    });
+  }
+  function iconCanvasPoint(event) {
+    const bounds = customIconCanvas.getBoundingClientRect();
+    return [Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)), Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height))];
+  }
+  function showToast(message) {
+    const el = $("toast");
+    el.textContent = message;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove("show"), 3000);
+  }
+  function updatePhase(date) {
+    const month = date.getMonth();
+    const config = basinConfig();
+    if (isInSeason(month)) {
+      $("seasonPhase").textContent = `Active season · ${config.title.includes("Western Pacific") ? "peak activity Jul–Oct" : config.title.includes("North Indian") ? "monsoon transition season" : "basin activity varies by month"}`;
+      return;
+    }
+    let days = 0;
+    const cursor = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12);
+    while (!config.activeMonths.includes(cursor.getMonth())) {
+      cursor.setDate(cursor.getDate() + 1);
+      days += 1;
+      if (days > 370) break;
+    }
+    $("seasonPhase").textContent = `Off-season · about ${days} days until basin activity increases`;
+  }
+  function renderEnvironment(date) {
+    const environment = environmentFor(date.getMonth());
+    const potential = !isInSeason(date.getMonth()) ? "Very low" : environment.sst >= 27 && environment.shear <= 12 ? "High" : environment.sst >= 26 && environment.shear <= 16 ? "Moderate" : "Low";
+    $("basinSstLabel").textContent = `${basinConfig().title.split(" ")[0]} basin SST`;
+    $("sstValue").textContent = `${environment.sst.toFixed(1)}°C`;
+    $("shearValue").textContent = environment.shear <= 10 ? "Low" : environment.shear <= 15 ? "Moderate" : "High";
+    $("potentialValue").textContent = potential;
+  }
+  function renderMonths(date) {
+    const container = $("months");
+    container.replaceChildren();
+    MONTHS.forEach((name, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `month${date.getMonth() === index ? " active" : ""}${isInSeason(index) ? " current" : ""}`;
+      button.textContent = name.slice(0, 3);
+      const targetYear = index < date.getMonth() ? date.getFullYear() + 1 : date.getFullYear();
+      button.title = `${name} ${targetYear}`;
+      button.setAttribute("aria-label", `Advance to ${name} ${targetYear}`);
+      button.addEventListener("click", () => advanceToMonth(index));
+      container.append(button);
+    });
+  }
+  function renderStorms() {
+    const list = $("stormList");
+    const ordered = [...state.storms].sort((a, b) => b.id.localeCompare(a.id, undefined, { numeric: true }));
+    $("systemCount").textContent = `${ordered.length} tracked`;
+    if (!ordered.length) {
+      list.innerHTML = '<div class="empty-state"><strong>Quiet basin</strong><p>No systems have formed this year. Advance the calendar to follow the season.</p></div>';
+      renderStormDetail(ordered);
+      return;
+    }
+    list.replaceChildren();
+    ordered.slice(0, 18).forEach((storm) => {
+      const row = document.createElement("div");
+      const cls = stormClass(storm);
+      row.className = "storm-row";
+      row.tabIndex = 0;
+      row.setAttribute("role", "button");
+      row.setAttribute("aria-label", `${stormName(storm)}, ${windLabel(storm.wind)}, ${storm.active ? "active" : "dissipated"}`);
+      row.innerHTML = `<span class="storm-name"><i class="dot ${cls}"></i><span><strong>${stormName(storm)}</strong><small>${windLabel(storm.wind)}${storm.active ? " · Active" : " · Dissipated"}</small></span></span><span class="storm-status ${cls}">${storm.active ? "Active" : "Ended"}</span>`;
+      row.addEventListener("click", () => { selectedStormId = storm.id; renderStormDetail(ordered); drawMap(); });
+      row.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); selectedStormId = storm.id; renderStormDetail(ordered); drawMap(); } });
+      list.append(row);
+    });
+    renderStormDetail(ordered);
+  }
+  function renderStormDetail(ordered) {
+    const storm = ordered.find((entry) => entry.id === selectedStormId) || ordered.find((entry) => entry.active);
+    const detail = $("stormDetail");
+    if (!storm) {
+      detail.innerHTML = "<strong>No storm selected</strong><p>Storm advisories appear here as systems develop.</p>";
+      return;
+    }
+    const environment = storm.environment || environmentFor(currentMonth(), storm.lat);
+    const impact = storm.landfall ? `${(storm.landfalls || []).length || 1} landfall(s) · ${storm.rainfall || 0} in rain · ${storm.surge || 0} m surge · $${(storm.damage || 0).toFixed(1)}B damage` : "No landfall recorded";
+    detail.innerHTML = `<strong>${stormName(storm)} · ${storm.active ? "Current advisory" : "Final advisory"}</strong><p>${storm.active ? "Estimated center" : "Last recorded center"}: ${Math.abs(storm.lat).toFixed(1)}°N, ${Math.abs(storm.lon).toFixed(1)}°W · ${storm.days} days tracked</p><div class="detail-grid"><div><span>Peak wind</span><strong>${windMph(storm.maxWind)} mph</strong></div><div><span>Minimum pressure</span><strong>${Math.round(storm.minPressure || (1013 - Math.max(0, storm.wind - 20) * 0.48))} mb</strong></div><div><span>SST / shear</span><strong>${environment.sst}°C / ${windMph(environment.shear)} mph</strong></div><div><span>Impacts</span><strong>${impact}</strong></div></div>`;
+  }
+  function renderNames() {
+    const roster = $("nameRoster");
+    roster.replaceChildren();
+    getSeasonNames().forEach((name, index) => {
+      const entry = document.createElement("div");
+      const status = index < state.stats.named ? "Named" : index === state.stats.named ? "Next" : "Upcoming";
+      entry.className = `name-entry${status === "Named" ? " named" : status === "Next" ? " next" : ""}`;
+      entry.innerHTML = `<strong>${String(index + 1).padStart(2, "0")} · ${name}</strong><span>${status}</span>`;
+      roster.append(entry);
+    });
+  }
+  function renderAuxiliaryNames() {
+    const panel = $("auxiliaryPanel");
+    panel.hidden = state.stats.named <= NAMES.length;
+    $("auxiliaryCount").textContent = `${Math.max(0, state.stats.named - NAMES.length)} used of ${AUXILIARY_NAMES.length}`;
+    const roster = $("auxiliaryRoster");
+    roster.replaceChildren();
+    getAuxiliaryNames().forEach((name, index) => {
+      const entry = document.createElement("div");
+      const nameNumber = NAMES.length + index;
+      const status = nameNumber < state.stats.named ? "Named" : nameNumber === state.stats.named ? "Next" : "Upcoming";
+      entry.className = `name-entry${status === "Named" ? " named" : status === "Next" ? " next" : ""}`;
+      entry.innerHTML = `<strong>${String(nameNumber + 1).padStart(2, "0")} · ${name}</strong><span>${status}</span>`;
+      roster.append(entry);
+    });
+  }
+  function renderRetirementOptions() {
+    const select = $("retirementSelect");
+    const retired = new Set(state.retirements.map((entry) => entry.name.toLowerCase()));
+    const allChoices = [...new Set([...NAMES, ...AUXILIARY_NAMES, ...Object.values(NAME_REPLACEMENTS).flat()])]
+      .filter((name) => !retired.has(name.toLowerCase()))
+      .sort((a, b) => a.localeCompare(b));
+    select.replaceChildren();
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "Choose a name";
+    placeholder.disabled = true;
+    placeholder.selected = true;
+    select.append(placeholder);
+    allChoices.forEach((name) => {
+      const option = document.createElement("option");
+      option.value = name;
+      option.textContent = name;
+      select.append(option);
+    });
+  }
+  function renderRetirements() {
+    const list = $("retiredList");
+    $("retiredCount").textContent = `${state.retirements.length} retired`;
+    if (!state.retirements.length) {
+      list.innerHTML = '<div class="empty-state"><p>Names are retired only after catastrophic modeled impacts.</p></div>';
+      return;
+    }
+    list.replaceChildren();
+    [...state.retirements].sort((a, b) => b.year - a.year).forEach((entry) => {
+      const row = document.createElement("div");
+      row.className = "retired-entry";
+      row.innerHTML = `<strong>${entry.name} · ${entry.year}</strong><span>Replacement: ${entry.replacement || "pending"}</span><p>${entry.reason}</p>`;
+      list.append(row);
+    });
+  }
+  function renderActivity() {
+    const list = $("activityList");
+    if (!state.log.length) {
+      list.innerHTML = '<div class="empty-state"><p>Storm formation, intensification, landfall, and dissipation updates appear here.</p></div>';
+      return;
+    }
+    list.replaceChildren();
+    state.log.slice(0, 10).forEach((event) => {
+      const row = document.createElement("div");
+      row.className = "activity-entry";
+      const date = event.date ? formatDate(dateOf(event.date)) : "Season update";
+      row.innerHTML = `<time>${date}</time><p>${event.text}</p>`;
+      list.append(row);
+    });
+  }
+  function renderArchive() {
+    const list = $("archiveList");
+    $("archiveCount").textContent = `${state.history.length} saved`;
+    if (!state.history.length) {
+      list.innerHTML = '<div class="empty-state"><p>Completed seasons will be saved here when December ends.</p></div>';
+      return;
+    }
+    list.replaceChildren();
+    state.history.slice(0, 8).forEach((season) => {
+      const row = document.createElement("div");
+      row.className = "archive-row";
+      const metrics = season.stats;
+      const stormWord = metrics.named === 1 ? "storm" : "storms";
+      row.innerHTML = `<span><strong>${season.year}</strong><br><span>${metrics.named} ${stormWord} · ${metrics.hurricanes} hurricanes · $${metrics.damage.toFixed(1)}B</span></span><button class="archive-open" type="button" aria-label="View ${season.year} season">View</button>`;
+      row.querySelector("button").addEventListener("click", () => showArchive(season));
+      list.append(row);
+    });
+  }
+  function showArchive(season) {
+    const names = season.storms.filter((storm) => storm.name).map((storm) => storm.name).join(", ") || "No named storms";
+    showToast(`${season.year}: ${season.stats.named} named · ${season.stats.hurricanes} hurricanes · ${season.stats.landfalls} landfalls · ${season.stats.deaths} fatalities · $${season.stats.damage.toFixed(1)}B damage. ${names}`);
+  }
+  function render() {
+    const date = dateOf();
+    const config = basinConfig();
+    const yearStart = new Date(date.getFullYear(), 0, 1, 12);
+    const yearEnd = new Date(date.getFullYear() + 1, 0, 1, 12);
+    const dayOfYear = Math.floor((date - yearStart) / 86400000);
+    const daysInYear = Math.round((yearEnd - yearStart) / 86400000);
+    $("seasonHeading").textContent = `${date.getFullYear()} hurricane season`;
+    $("basinSelect").value = state.currentBasinId;
+    $("basinMapTitle").textContent = config.title;
+    $("basinNameLabel").textContent = config.title;
+    $("seasonDateLabel").textContent = config.season;
+    $("seasonWindow").textContent = config.season;
+    $("currentDate").textContent = formatDate(date);
+    $("mapDate").textContent = `${MONTHS[date.getMonth()]} · ${date.getFullYear()}`;
+    $("seasonProgress").textContent = `${Math.floor(dayOfYear / (daysInYear - 1) * 100)}%`;
+    $("showGraticule").checked = state.preferences.showGraticule;
+    $("showForecastCone").checked = state.preferences.showForecastCone;
+    $("namedCount").textContent = state.stats.named;
+    $("hurricaneCount").textContent = state.stats.hurricanes;
+    $("majorCount").textContent = state.stats.major;
+    $("landfallCount").textContent = state.stats.landfalls;
+    $("fatalityCount").textContent = state.stats.deaths;
+    $("aceCount").textContent = state.stats.ace.toFixed(1);
+    $("damageCount").textContent = state.stats.damage >= 1 ? `$${state.stats.damage.toFixed(1)}B` : `$${Math.round(state.stats.damage * 1000)}M`;
+    updatePhase(date);
+    renderEnvironment(date);
+    renderGradientLegend(state.preferences.windGradient);
+    renderMonths(date);
+    renderStorms();
+    renderNames();
+    renderAuxiliaryNames();
+    renderRetirementOptions();
+    renderRetirements();
+    renderActivity();
+    renderArchive();
+    drawMap();
+  }
+  function mapPoint(lon, lat, width, height) {
+    const [minLon, maxLon, minLat, maxLat] = basinConfig().bounds;
+    const x = (lon - minLon) / (maxLon - minLon) * width;
+    const y = (maxLat - lat) / (maxLat - minLat) * height;
+    return [x, y];
+  }
+  function drawForecastCone(storm, width, height) {
+    const recent = storm.track.slice(-4);
+    const last = recent[recent.length - 1];
+    const first = recent[0];
+    const divisor = Math.max(1, recent.length - 1);
+    const deltaLon = (last.lon - first.lon) / divisor;
+    const deltaLat = (last.lat - first.lat) / divisor;
+    const left = [];
+    const right = [];
+    for (let day = 1; day <= 4; day += 1) {
+      const spread = 0.35 + day * 0.48;
+      const centerLon = storm.lon + deltaLon * day;
+      const centerLat = storm.lat + deltaLat * day;
+      left.push(mapPoint(centerLon - spread, centerLat - spread * 0.62, width, height));
+      right.push(mapPoint(centerLon + spread, centerLat + spread * 0.62, width, height));
+    }
+    ctx.beginPath();
+    [...left, ...right.reverse()].forEach(([x, y], index) => {
+      if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.fillStyle = "rgba(66,109,130,.13)";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(66,109,130,.5)";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  function intensityColor(windKnots) {
+    const mph = windMph(windKnots);
+    const stops = normalizeGradient((appearanceDraft || state.preferences).windGradient);
+    let highIndex = stops.findIndex(([speed]) => speed >= mph);
+    if (highIndex < 0) highIndex = stops.length - 1;
+    const lowIndex = Math.max(0, highIndex - 1);
+    const [lowSpeed, lowHex] = stops[lowIndex];
+    const [highSpeed, highHex] = stops[highIndex];
+    const amount = lowIndex === highIndex ? 0 : Math.max(0, Math.min(1, (mph - lowSpeed) / (highSpeed - lowSpeed)));
+    const lowColor = [1, 3, 5].map((offset) => parseInt(lowHex.slice(offset, offset + 2), 16));
+    const highColor = [1, 3, 5].map((offset) => parseInt(highHex.slice(offset, offset + 2), 16));
+    const rgb = lowColor.map((value, channel) => Math.round(value + (highColor[channel] - value) * amount));
+    return `rgb(${rgb.join(",")})`;
+  }
+  function renderGradientLegend(gradient) {
+    const stops = normalizeGradient(gradient);
+    const minimum = stops[0][0];
+    const maximum = stops[stops.length - 1][0];
+    const cssStops = stops.map(([speed, color]) => `${color} ${((speed - minimum) / (maximum - minimum) * 100).toFixed(1)}%`).join(", ");
+    $("gradientLegend").style.background = `linear-gradient(90deg, ${cssStops})`;
+  }
+  function drawCustomStormIcon(storm, radius) {
+    const strokes = (appearanceDraft || state.preferences).customIconStrokes || [];
+    ctx.strokeStyle = intensityColor(storm.wind);
+    ctx.lineWidth = Math.max(1.4, radius * 0.2);
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    strokes.forEach((stroke) => {
+      if (stroke.length < 2) return;
+      ctx.beginPath();
+      stroke.forEach((point, index) => {
+        const x = (point[0] - 0.5) * radius * 1.8;
+        const y = (point[1] - 0.5) * radius * 1.8;
+        if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    });
+  }
+  function drawStormIcon(storm, x, y) {
+    const radius = storm.id === selectedStormId ? 10 : 8;
+    const color = intensityColor(storm.wind);
+    const stormSymbol = (appearanceDraft || state.preferences).stormSymbol;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(0, 0, radius + 1, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255,254,250,.92)";
+    ctx.fill();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    switch (stormSymbol) {
+      case "bands":
+        for (let band = 0; band < 3; band += 1) {
+          ctx.beginPath();
+          ctx.arc(0, 0, radius * (0.32 + band * 0.22), band * 1.6, band * 1.6 + Math.PI * 1.35);
+          ctx.stroke();
+        }
+        ctx.beginPath(); ctx.arc(0, 0, radius * 0.16, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill();
+        break;
+      case "eye":
+        ctx.beginPath(); ctx.arc(0, 0, radius * 0.72, 0, Math.PI * 2); ctx.stroke();
+        ctx.beginPath(); ctx.arc(0, 0, radius * 0.3, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill();
+        for (let band = 0; band < 3; band += 1) {
+          ctx.beginPath(); ctx.arc(0, 0, radius * (0.45 + band * 0.17), band * 2.1, band * 2.1 + 1.3); ctx.stroke();
+        }
+        break;
+      case "radar":
+        ctx.beginPath(); ctx.arc(0, 0, radius * 0.76, 0, Math.PI * 2); ctx.stroke();
+        ctx.beginPath(); ctx.arc(0, 0, radius * 0.48, 0, Math.PI * 2); ctx.stroke();
+        ctx.beginPath(); ctx.arc(0, 0, radius * 0.18, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill();
+        break;
+      case "custom":
+        drawCustomStormIcon(storm, radius);
+        break;
+      default: {
+        const turns = stormSymbol === "spiral" ? 2.25 : 3.1;
+        for (let arm = 0; arm < 2; arm += 1) {
+          ctx.beginPath();
+          for (let step = 0; step <= 44; step += 1) {
+            const progress = step / 44;
+            const angle = progress * turns * Math.PI + arm * Math.PI;
+            const distance = radius * (0.08 + progress * 0.78);
+            const px = Math.cos(angle) * distance;
+            const py = Math.sin(angle) * distance;
+            if (step === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+          }
+          ctx.stroke();
+        }
+        ctx.beginPath(); ctx.arc(0, 0, radius * 0.15, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
+  function drawMapFurniture(width, height, bounds) {
+    const midpointLatitude = (bounds[2] + bounds[3]) / 2;
+    const longitudeSpanKm = (bounds[1] - bounds[0]) * 111.32 * Math.cos(midpointLatitude * Math.PI / 180);
+    const scaleWidth = Math.max(34, Math.min(140, width * 1000 / longitudeSpanKm));
+    const scaleX = width - scaleWidth - 18;
+    const scaleY = height - 23;
+    ctx.strokeStyle = "#334d4a";
+    ctx.fillStyle = "#334d4a";
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(scaleX, scaleY); ctx.lineTo(scaleX + scaleWidth, scaleY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(scaleX, scaleY - 4); ctx.lineTo(scaleX, scaleY + 2); ctx.moveTo(scaleX + scaleWidth, scaleY - 4); ctx.lineTo(scaleX + scaleWidth, scaleY + 2); ctx.stroke();
+    ctx.font = "9px Avenir Next, sans-serif";
+    ctx.fillText("≈1,000 km", scaleX, scaleY - 6);
+    ctx.font = "bold 10px Avenir Next, sans-serif";
+    ctx.fillText("N", width - 18, 19);
+    ctx.beginPath(); ctx.moveTo(width - 18, 23); ctx.lineTo(width - 22, 32); ctx.lineTo(width - 14, 32); ctx.closePath(); ctx.fill();
+  }
+  function drawMap() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    if (!rect.width || !rect.height) return;
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const width = rect.width;
+    const height = rect.height;
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "#d9e8e4";
+    ctx.fillRect(0, 0, width, height);
+    const bounds = basinConfig().bounds;
+    const longitudeStep = Math.ceil((bounds[1] - bounds[0]) / 8 / 10) * 10;
+    const latitudeStep = Math.ceil((bounds[3] - bounds[2]) / 5 / 10) * 10;
+    if ($("showGraticule").checked) {
+      ctx.strokeStyle = "rgba(73,119,119,.15)";
+      ctx.lineWidth = 1;
+      for (let lon = Math.ceil(bounds[0] / longitudeStep) * longitudeStep; lon <= bounds[1]; lon += longitudeStep) {
+        const [x] = mapPoint(lon, 0, width, height);
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
+      }
+      for (let lat = Math.ceil(bounds[2] / latitudeStep) * latitudeStep; lat <= bounds[3]; lat += latitudeStep) {
+        const [, y] = mapPoint(0, lat, width, height);
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+      }
+    }
+    const fictional = state.currentBasinId === "aster-sea" || state.currentBasinId === "nacre-reach";
+    const fallbackLand = state.currentBasinId === "atlantic" ? [
+      [[-102, 52], [-82, 52], [-81, 49], [-80, 46], [-72, 45], [-67, 47], [-61, 46], [-57, 48], [-52, 48], [-52, 45], [-60, 43], [-65, 41], [-69, 42], [-71, 40], [-74, 40], [-74, 36], [-77, 34], [-79, 32], [-81, 30], [-81, 25], [-80, 24], [-82, 25], [-83, 28], [-85, 30], [-89, 29], [-92, 29], [-96, 28], [-97, 25], [-97, 21], [-93, 19], [-91, 18], [-88, 16], [-86, 15], [-84, 11], [-82, 9], [-79, 9], [-77, 8], [-76, 11], [-80, 14], [-83, 17], [-87, 19], [-91, 21], [-96, 23], [-100, 26], [-102, 29]],
+      [[-74, 20], [-71, 20], [-68, 19], [-67, 18], [-69, 17], [-72, 18], [-74, 19]],
+      [[-85, 22], [-82, 23], [-79, 23], [-76, 22], [-77, 21], [-81, 21], [-84, 21]],
+      [[-80, 25], [-80, 28], [-80, 30], [-79, 31], [-78, 28], [-79, 25]],
+      [[-78, 27], [-76, 27.5], [-74, 26], [-72, 24], [-74, 23], [-77, 24]],
+      [[-68, 18], [-65, 18], [-64, 17], [-66, 17]],
+      [[-62, 16], [-61, 17], [-60, 15], [-61, 14]],
+      [[-60, 14], [-59, 15], [-58, 14], [-59, 13]],
+      [[-78, 26], [-77, 26.5], [-76, 25.5], [-77, 25]]
+    ] : (REGIONAL_LAND[state.currentBasinId] || []);
+    const land = countryPolygons && !fictional ? countryPolygons : fallbackLand;
+    ctx.fillStyle = "#edf0e3";
+    ctx.strokeStyle = countryPolygons && !fictional ? "#b3c0b9" : "#a9b9ae";
+    ctx.lineWidth = 1;
+    land.forEach((shape) => {
+      const polygon = shape.ring || shape;
+      let minLon = Infinity;
+      let maxLon = -Infinity;
+      let minLat = Infinity;
+      let maxLat = -Infinity;
+      polygon.forEach(([lon, lat]) => {
+        minLon = Math.min(minLon, lon); maxLon = Math.max(maxLon, lon);
+        minLat = Math.min(minLat, lat); maxLat = Math.max(maxLat, lat);
+      });
+      if (maxLon < bounds[0] || minLon > bounds[1] || maxLat < bounds[2] || minLat > bounds[3]) return;
+      ctx.beginPath();
+      polygon.forEach(([lon, lat], index) => {
+        const [x, y] = mapPoint(lon, lat, width, height);
+        if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+    });
+    const countryLabels = {
+      atlantic: [["UNITED STATES", -98, 39], ["MEXICO", -103, 23], ["CUBA", -78, 21], ["BRAZIL", -53, -10]],
+      "east-pacific": [["UNITED STATES", -115, 39], ["MEXICO", -105, 25], ["CENTRAL AMERICA", -87, 12]],
+      "west-pacific": [["CHINA", 112, 34], ["JAPAN", 138, 37], ["PHILIPPINES", 122, 12], ["AUSTRALIA", 134, -22]],
+      "north-indian": [["INDIA", 78, 23], ["OMAN", 57, 20], ["MYANMAR", 96, 21]],
+      "aster-sea": [],
+      "nacre-reach": []
+    }[state.currentBasinId] || [];
+    if (countryPolygons && !fictional) {
+      ctx.font = "bold 9px Avenir Next, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillStyle = "rgba(82,103,96,.82)";
+      countryLabels.forEach(([label, lon, lat]) => {
+        const [x, y] = mapPoint(lon, lat, width, height);
+        ctx.fillText(label, x, y);
+      });
+      ctx.textAlign = "start";
+    }
+    const labels = {
+      atlantic: [["GULF OF MEXICO", -90, 24], ["CARIBBEAN SEA", -75, 15], ["NORTH ATLANTIC", -40, 35]],
+      "east-pacific": [["EASTERN PACIFIC", -135, 32], ["MEXICO", -106, 17]],
+      "west-pacific": [["PHILIPPINE SEA", 140, 18], ["WESTERN PACIFIC", 165, 30]],
+      "north-indian": [["ARABIAN SEA", 62, 16], ["BAY OF BENGAL", 90, 15]],
+      "aster-sea": [["ASTER SEA", -37, 37]],
+      "nacre-reach": [["NACRE REACH", -32, 36]]
+    }[state.currentBasinId] || [];
+    ctx.fillStyle = "#627f7c";
+    ctx.font = "10px Avenir Next, sans-serif";
+    labels.forEach(([label, lon, lat]) => {
+      const [x, y] = mapPoint(lon, lat, width, height);
+      ctx.fillText(label, x, y);
+    });
+    ctx.fillStyle = "#58716f";
+    ctx.font = "9px Avenir Next, sans-serif";
+    for (let lon = Math.ceil(bounds[0] / longitudeStep) * longitudeStep; lon <= bounds[1]; lon += longitudeStep) {
+      const [x] = mapPoint(lon, 0, width, height);
+      ctx.fillText(`${Math.abs(lon)}°${lon < 0 ? "W" : "E"}`, x + 3, height - 7);
+    }
+    state.storms.forEach((storm) => {
+      if ($("showForecastCone").checked && storm.active && storm.track.length > 1 && (!selectedStormId || storm.id === selectedStormId)) drawForecastCone(storm, width, height);
+      if (storm.track.length > 1) {
+        ctx.beginPath();
+        storm.track.forEach((point, index) => {
+          const [x, y] = mapPoint(point.lon, point.lat, width, height);
+          if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        const selected = storm.id === selectedStormId;
+        ctx.strokeStyle = stormClass(storm) === "major" ? "rgba(155,65,57,.8)" : stormClass(storm) ? "rgba(200,92,72,.72)" : "rgba(66,109,130,.65)";
+        ctx.lineWidth = selected ? 3 : 1.7;
+        ctx.setLineDash(storm.active ? [] : [4, 4]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+      const [x, y] = mapPoint(storm.lon, storm.lat, width, height);
+      if (x < -20 || x > width + 20 || y < -20 || y > height + 20) return;
+      drawStormIcon(storm, x, y);
+      ctx.fillStyle = "#263b3d"; ctx.font = "bold 10px Avenir Next, sans-serif"; ctx.fillText(stormName(storm), x + 8, y - 7);
+    });
+    drawMapFurniture(width, height, bounds);
+  }
+  $("advanceDay").addEventListener("click", advanceOneDay);
+  $("advanceWeek").addEventListener("click", () => { for (let day = 0; day < 7; day += 1) advanceOneDay(); });
+  $("nextMonth").addEventListener("click", progressMonth);
+  $("basinSelect").addEventListener("change", (event) => switchBasin(event.target.value));
+  $("showGraticule").addEventListener("change", (event) => { state.preferences.showGraticule = event.target.checked; save(); drawMap(); });
+  $("showForecastCone").addEventListener("change", (event) => { state.preferences.showForecastCone = event.target.checked; save(); drawMap(); });
+  canvas.addEventListener("pointermove", (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const [minLon, maxLon, minLat, maxLat] = basinConfig().bounds;
+    const longitude = minLon + (event.clientX - rect.left) / rect.width * (maxLon - minLon);
+    const latitude = maxLat - (event.clientY - rect.top) / rect.height * (maxLat - minLat);
+    const longitudeLabel = `${Math.abs(longitude).toFixed(1)}°${longitude < 0 ? "W" : "E"}`;
+    const latitudeLabel = `${Math.abs(latitude).toFixed(1)}°${latitude < 0 ? "S" : "N"}`;
+    $("mapCoordinates").textContent = `${latitudeLabel}, ${longitudeLabel}`;
+  });
+  canvas.addEventListener("pointerleave", () => { $("mapCoordinates").textContent = "Move over map for coordinates"; });
+  $("appearanceButton").addEventListener("click", () => {
+    $("emblemSelect").value = state.preferences.emblem;
+    $("iconColor").value = state.preferences.iconColor;
+    $("stormSymbolSelect").value = state.preferences.stormSymbol;
+    customIconDraft = state.preferences.customIconStrokes.map((stroke) => stroke.map((point) => [...point]));
+    $("customIconEditor").hidden = state.preferences.stormSymbol !== "custom";
+    drawCustomIconEditor();
+    appearanceDraft = { ...state.preferences, windGradient: normalizeGradient(state.preferences.windGradient), customIconStrokes: customIconDraft };
+    renderGradientEditor();
+    previewAppearance();
+    $("appearanceDialog").showModal();
+  });
+  $("emblemSelect").addEventListener("input", previewAppearance);
+  $("iconColor").addEventListener("input", () => { drawCustomIconEditor(); previewAppearance(); });
+  $("gradientStops").addEventListener("change", commitGradientEdit);
+  $("gradientStops").addEventListener("click", removeGradientStop);
+  $("addGradientStop").addEventListener("click", addGradientStop);
+  $("resetGradient").addEventListener("click", () => {
+    appearanceDraft.windGradient = DEFAULT_WIND_GRADIENT.map((stop) => [...stop]);
+    renderGradientEditor();
+    previewAppearance();
+  });
+  $("stormSymbolSelect").addEventListener("input", () => {
+    $("customIconEditor").hidden = $("stormSymbolSelect").value !== "custom";
+    previewAppearance();
+  });
+  customIconCanvas.addEventListener("pointerdown", (event) => {
+    activeCustomStroke = [iconCanvasPoint(event)];
+    customIconDraft.push(activeCustomStroke);
+    customIconCanvas.setPointerCapture(event.pointerId);
+    drawCustomIconEditor();
+    previewAppearance();
+  });
+  customIconCanvas.addEventListener("pointermove", (event) => {
+    if (!activeCustomStroke) return;
+    activeCustomStroke.push(iconCanvasPoint(event));
+    drawCustomIconEditor();
+    previewAppearance();
+  });
+  customIconCanvas.addEventListener("pointerup", () => { activeCustomStroke = null; });
+  customIconCanvas.addEventListener("pointercancel", () => { activeCustomStroke = null; });
+  $("undoIconStroke").addEventListener("click", () => { customIconDraft.pop(); drawCustomIconEditor(); previewAppearance(); });
+  $("clearIconCanvas").addEventListener("click", () => { customIconDraft = []; drawCustomIconEditor(); previewAppearance(); });
+  $("cancelAppearance").addEventListener("click", () => $("appearanceDialog").close());
+  $("appearanceDialog").addEventListener("close", () => {
+    appearanceDraft = null;
+    customIconDraft = state.preferences.customIconStrokes.map((stroke) => stroke.map((point) => [...point]));
+    applyAppearance(state.preferences);
+    renderGradientEditor();
+    renderGradientLegend(state.preferences.windGradient);
+    drawCustomIconEditor();
+    drawMap();
+  });
+  $("saveAppearance").addEventListener("click", () => {
+    state.preferences = { emblem: $("emblemSelect").value, iconColor: $("iconColor").value, stormSymbol: $("stormSymbolSelect").value, customIconStrokes: customIconDraft, windGradient: normalizeGradient(appearanceDraft.windGradient) };
+    applyAppearance(state.preferences);
+    save();
+    $("appearanceDialog").close();
+    showToast("Appearance saved.");
+  });
+  $("retirementForm").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const customName = $("customRetirementName").value.trim();
+    const name = customName || $("retirementSelect").value;
+    if (!name) {
+      showToast("Choose a list name or enter a custom name.");
+      return;
+    }
+    if (!/^[\p{L}][\p{L} .'-]{1,31}$/u.test(name)) {
+      showToast("Enter a name between 2 and 32 letters.");
+      return;
+    }
+    if (state.retirements.some((entry) => entry.name.toLowerCase() === name.toLowerCase())) {
+      showToast(`${name} is already retired.`);
+      return;
+    }
+    if (!window.confirm(`Retire ${name} from the storm-name rotation? This is saved for future seasons.`)) return;
+    retireName(name, currentYear(), "Manually retired");
+    $("customRetirementName").value = "";
+    save(); render(); showToast(`${name} retired. The change is saved for future seasons.`);
+  });
+  $("newSeasonButton").addEventListener("click", () => {
+    if (!window.confirm(`Start ${currentYear() + 1} now? The current season will be archived and its stats saved.`)) return;
+    const completedYear = currentYear();
+    archiveSeason(completedYear);
+    state.date = [completedYear + 1, 0, 1];
+    save(); render();
+  });
+  $("resetButton").addEventListener("click", () => {
+    if (!window.confirm("Delete all saved seasons and start over at January 1, 2026? This cannot be undone.")) return;
+    state = defaults();
+    selectedStormId = null; save(); render(); showToast("All local season data cleared.");
+  });
+  window.addEventListener("resize", drawMap);
+  applyAppearance(state.preferences);
+  render();
+  loadCoastlines();
+})();
+</script>
+</body>
+</html>
